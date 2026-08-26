@@ -1,0 +1,154 @@
+@import "tailwindcss";
+
+:root {
+  /* Colors — see design_handoff_reels_landing/README.md § Design Tokens */
+  --color-bg-base: #f4f3ef;
+  --color-bg-raised: #ece9e6;
+  --color-surface: #ffffff;
+  --color-ink: #2b2b2b;
+  --color-ink-deep: #232323;
+  --color-body-muted: #4a4844;
+  --color-body-muted-2: #55534f;
+  --color-label: #6b6862;
+  --color-label-light: #8c8880;
+  --color-label-lightest: #a09b92;
+  --color-bronze: #c5a079;
+  --color-bronze-deep: #b88b5d;
+
+  /* Radii */
+  --radius-pill: 999px;
+  --radius-panel-lg: 34px;
+  --radius-panel-services: 40px;
+  --radius-panel-showcase: 30px;
+  --radius-card: 26px;
+  --radius-card-sm: 24px;
+  --radius-frame: 22px;
+  --radius-plate: 20px;
+}
+
+@theme inline {
+  --color-bg-base: var(--color-bg-base);
+  --color-bg-raised: var(--color-bg-raised);
+  --color-surface: var(--color-surface);
+  --color-ink: var(--color-ink);
+  --color-ink-deep: var(--color-ink-deep);
+  --color-body-muted: var(--color-body-muted);
+  --color-body-muted-2: var(--color-body-muted-2);
+  --color-label: var(--color-label);
+  --color-label-light: var(--color-label-light);
+  --color-label-lightest: var(--color-label-lightest);
+  --color-bronze: var(--color-bronze);
+  --color-bronze-deep: var(--color-bronze-deep);
+
+  --radius-pill: var(--radius-pill);
+  --radius-panel-lg: var(--radius-panel-lg);
+  --radius-panel-services: var(--radius-panel-services);
+  --radius-panel-showcase: var(--radius-panel-showcase);
+  --radius-card: var(--radius-card);
+  --radius-card-sm: var(--radius-card-sm);
+  --radius-frame: var(--radius-frame);
+  --radius-plate: var(--radius-plate);
+
+  --font-sans: var(--font-inter-tight), Helvetica, Arial, sans-serif;
+}
+
+/* Layered so Tailwind utility classes (which live in @layer utilities) can
+   still override these — unlayered CSS would otherwise always win regardless
+   of specificity. */
+@layer base {
+  * {
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    background: var(--color-bg-base);
+  }
+
+  body {
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    overflow-x: hidden;
+  }
+
+  a {
+    color: var(--color-bronze-deep);
+    text-decoration: none;
+  }
+
+  ::selection {
+    background: var(--color-bronze);
+    color: var(--color-bg-base);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  section[id] {
+    scroll-margin-top: 24px;
+  }
+}
+
+/* Glass fills — verbatim rgba/gradient values from the handoff */
+@layer components {
+  .glass-nav {
+    background: rgba(244, 243, 239, 0.16);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  .glass-showcase {
+    background: linear-gradient(
+      150deg,
+      rgba(160, 175, 190, 0.28),
+      rgba(255, 255, 255, 0.55) 55%,
+      rgba(197, 160, 121, 0.18)
+    );
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 30px 60px -44px rgba(43, 43, 43, 0.6);
+  }
+
+  .scrim-hero {
+    background: linear-gradient(
+      180deg,
+      rgba(30, 30, 30, 0.55) 0%,
+      rgba(30, 30, 30, 0.15) 34%,
+      rgba(30, 30, 30, 0.72) 100%
+    );
+  }
+
+  .scrim-reviews {
+    background: linear-gradient(
+      180deg,
+      rgba(30, 30, 30, 0.4) 0%,
+      rgba(30, 30, 30, 0.05) 40%,
+      rgba(30, 30, 30, 0.7) 100%
+    );
+  }
+
+  .footer-glow {
+    background:
+      radial-gradient(120% 90% at 88% 10%, rgba(197, 160, 121, 0.32), transparent 60%),
+      radial-gradient(90% 80% at 0% 100%, rgba(150, 168, 184, 0.22), transparent 62%);
+  }
+
+  .stat-card-shadow {
+    box-shadow: 0 18px 40px -30px rgba(43, 43, 43, 0.5);
+  }
+}

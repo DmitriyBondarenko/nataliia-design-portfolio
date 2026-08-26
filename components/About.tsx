@@ -17,7 +17,7 @@ export function About() {
             про мене
           </span>
         </h2>
-        <span className="text-[22px] text-bronze">✳</span>
+        <span className="text-[22px] text-bronze">✳︎</span>
       </div>
 
       <div className="mt-[clamp(34px,5vw,64px)] grid grid-cols-[repeat(auto-fit,minmax(290px,1fr))] items-start gap-[clamp(24px,3vw,54px)]">

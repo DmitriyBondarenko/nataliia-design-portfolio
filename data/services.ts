@@ -1,7 +1,5 @@
 // Services, prices and case content for "Послуги та прайс".
-// Copy is verbatim from design_handoff_reels_landing/README.md § 3 "Content (verbatim from the brief)".
-// Media has no real assets yet — every item renders through <MediaPlaceholder> until
-// real files/URLs land (see README § "Assets & Media").
+// Media renders through <MediaPlaceholder> — real files/URLs land in public/media/.
 
 export type Ratio = "9 / 16" | "4 / 5" | "16 / 10";
 

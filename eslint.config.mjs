@@ -12,8 +12,6 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
-    // Design reference bundle — prototype runtime, not production code.
-    "design_handoff_reels_landing/**",
   ]),
 ]);
 

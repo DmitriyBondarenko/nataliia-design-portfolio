@@ -8,7 +8,6 @@ import { PlayIcon } from "./icons";
 // Real media slot. Pass `src` (photos) or `poster` (video cover frame) once the
 // file exists in /public — until then, or if it 404s, this falls back to a
 // placeholder that keeps the design's exact aspect ratio so layout never shifts.
-// See design_handoff_reels_landing/README.md § "Assets & Media".
 export function MediaPlaceholder({
   ratio,
   alt,

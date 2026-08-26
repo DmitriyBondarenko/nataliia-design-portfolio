@@ -129,7 +129,7 @@ export function Terms() {
                         key={j}
                         className="flex gap-3 text-[20px] leading-[1.5] text-body-muted"
                       >
-                        <span className="text-bronze">✳</span>
+                        <span className="text-bronze">✳︎</span>
                         <p className="m-0">
                           <span className="font-semibold text-ink">
                             {row.lead}

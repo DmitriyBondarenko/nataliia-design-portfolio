@@ -18,7 +18,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="uk" className={`${interTight.variable} antialiased`}>
-      <body className="bg-bg-base text-ink">{children}</body>
+      <body className="bg-bg-base text-ink" suppressHydrationWarning>
+        {children}
+      </body>
     </html>
   );
 }

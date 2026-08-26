@@ -45,14 +45,14 @@ export function Hero() {
                 <a
                   key={link.href}
                   href={link.href}
-                  className="text-[22px] tracking-[0.06em] text-white/82 transition-colors hover:text-white"
+                  className="text-[20px] tracking-[0.06em] text-white/82 transition-colors hover:text-white"
                 >
                   {link.label}
                 </a>
               ))}
               <a
                 href="#contact"
-                className="whitespace-nowrap rounded-pill bg-bg-base px-5 py-[11px] text-[22px] tracking-[0.02em] text-ink transition-colors hover:bg-bronze-deep hover:text-bg-base"
+                className="whitespace-nowrap rounded-pill bg-bg-base px-5 py-[11px] text-[20px] tracking-[0.02em] text-ink transition-colors hover:bg-bronze-deep hover:text-bg-base"
               >
                 Звʼязатись зі мною
               </a>
@@ -82,7 +82,7 @@ export function Hero() {
               <a
                 href="#contact"
                 onClick={() => setMenuOpen(false)}
-                className="mt-2 rounded-pill bg-bg-base px-5 py-3 text-center text-[22px] tracking-[0.02em] text-ink transition-colors hover:bg-bronze-deep hover:text-bg-base"
+                className="mt-2 rounded-pill bg-bg-base px-5 py-3 text-center text-[20px] tracking-[0.02em] text-ink transition-colors hover:bg-bronze-deep hover:text-bg-base"
               >
                 Звʼязатись зі мною
               </a>
@@ -91,7 +91,7 @@ export function Hero() {
         </nav>
 
         <div className="pointer-events-none relative z-[2] flex flex-1 flex-col justify-end px-[clamp(18px,4vw,46px)] pb-[clamp(24px,3vw,44px)]">
-          <span className="mb-4.5 text-[26px] leading-none text-bronze">✳</span>
+          <span className="mb-4.5 text-[26px] leading-none text-bronze">✳︎</span>
 
           <h1 className="m-0 text-[clamp(38px,9vw,108px)] leading-[0.9] font-medium tracking-[-0.035em] text-balance text-bg-base">
             Creative<span className="text-bronze">&nbsp;&amp;</span>
@@ -102,12 +102,12 @@ export function Hero() {
           </h1>
 
           <div className="mt-[clamp(18px,3vw,32px)] flex flex-wrap items-center justify-between gap-5.5">
-            <p className="m-0 text-[clamp(22px,2.2vw,26px)] font-light text-white/95">
+            <p className="m-0 text-[clamp(20px,2.2vw,24px)] font-light text-white/95">
               Nataliia Bondarenko
             </p>
             <a
               href="#services"
-              className="group pointer-events-auto flex items-center gap-3.5 rounded-pill bg-bronze-deep py-2 pr-2 pl-6 text-[22px] text-bg-base transition-colors hover:bg-bg-base hover:text-ink"
+              className="group pointer-events-auto flex items-center gap-3.5 rounded-pill bg-bronze-deep py-2 pr-2 pl-6 text-[20px] text-bg-base transition-colors hover:bg-bg-base hover:text-ink"
             >
               Переглянути послуги
               <span className="flex h-10 w-10 items-center justify-center rounded-pill bg-bg-base text-bronze-deep transition-colors group-hover:bg-bronze group-hover:text-bg-base">

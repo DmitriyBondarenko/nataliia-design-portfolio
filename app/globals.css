@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  /* Colors — see design_handoff_reels_landing/README.md § Design Tokens */
+  /* Colors */
   --color-bg-base: #f4f3ef;
   --color-bg-raised: #ece9e6;
   --color-surface: #ffffff;

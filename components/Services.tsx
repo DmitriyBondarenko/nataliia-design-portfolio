@@ -104,21 +104,15 @@ export function Services() {
         <div className="mt-[clamp(24px,3vw,40px)] flex flex-wrap gap-2.5">
           {SERVICE_TABS.map((t) => {
             const active = t.id === tabId;
-            const isDesignTab = t.id === "design";
-            const videoInactive = t.id === "video" && !active;
             return (
               <button
                 key={t.id}
                 type="button"
                 onClick={() => selectTab(t.id)}
-                className={`flex flex-[1_1_200px] items-center gap-3.5 rounded-card-sm border px-5.5 py-4.5 text-left text-[clamp(22px,1.6vw,24px)] font-medium tracking-[-0.01em] transition-all duration-200 ${
-                  isDesignTab
-                    ? "border-ink bg-ink text-bg-base hover:bg-[#363636]"
-                    : active
-                      ? "border-ink bg-ink text-bg-base"
-                      : videoInactive
-                        ? "border-bronze-deep bg-bronze-deep text-bg-base hover:border-bronze hover:bg-bronze"
-                        : "border-ink/12 bg-white/60 text-ink"
+                className={`flex flex-[1_1_200px] items-center gap-3.5 rounded-card-sm border border-ink px-5.5 py-4.5 text-left text-[clamp(22px,1.6vw,24px)] font-medium tracking-[-0.01em] transition-all duration-200 ${
+                  active
+                    ? "bg-ink text-bg-base hover:bg-[#363636]"
+                    : "bg-[#F1EFEB] text-ink"
                 }`}
               >
                 <span className="inline-flex text-[19px] opacity-90">

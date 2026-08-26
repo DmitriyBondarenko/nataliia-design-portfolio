@@ -6,7 +6,7 @@ export function Footer() {
       <div className="relative overflow-hidden rounded-panel-lg bg-ink-deep px-[clamp(22px,5vw,72px)] py-[clamp(36px,7vw,96px)]">
         <div className="footer-glow pointer-events-none absolute inset-0" />
         <div className="relative">
-          <span className="text-[24px] text-bronze">✳</span>
+          <span className="text-[24px] text-bronze">✳︎</span>
           <h2 className="m-0 mt-4 text-[clamp(38px,9vw,108px)] leading-[0.95] font-normal tracking-[-0.04em] text-bg-base">
             Обговоримо
             <br />
@@ -23,7 +23,7 @@ export function Footer() {
               href="https://t.me/natalii_bnd"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-3.5 rounded-pill bg-bg-base py-2 pr-2 pl-6.5 text-[22px] font-medium text-ink transition-colors hover:bg-bronze hover:text-bg-base"
+              className="flex items-center gap-3.5 rounded-pill bg-bg-base py-2 pr-2 pl-6.5 text-[20px] font-medium text-ink transition-colors hover:bg-bronze hover:text-bg-base"
             >
               Написати в Telegram
               <span className="flex h-10.5 w-10.5 items-center justify-center rounded-pill bg-ink/10">
@@ -34,7 +34,7 @@ export function Footer() {
               href="https://www.instagram.com/nataliia_bnd?igsi=MWVpOGJwYjI1NWZkdQ%3D%3D&utm_source=qr"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-3.5 rounded-pill border border-bg-base/28 bg-bg-base/10 py-2 pr-2 pl-6.5 text-[22px] font-medium text-bg-base transition-colors hover:bg-bg-base/20"
+              className="flex items-center gap-3.5 rounded-pill border border-bg-base/28 bg-bg-base/10 py-2 pr-2 pl-6.5 text-[20px] font-medium text-bg-base transition-colors hover:bg-bg-base/20"
             >
               Написати в Instagram
               <span className="flex h-10.5 w-10.5 items-center justify-center rounded-pill bg-bg-base/14">

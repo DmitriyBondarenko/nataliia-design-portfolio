@@ -31,7 +31,7 @@ export function Footer() {
               </span>
             </a>
             <a
-              href="https://www.instagram.com/natalii.bnd?igsi=bGpiMjh1bGhxa3h6&utm_source=qr"
+              href="https://www.instagram.com/nataliia_bnd?igsi=MWVpOGJwYjI1NWZkdQ%3D%3D&utm_source=qr"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-3.5 rounded-pill border border-bg-base/28 bg-bg-base/10 py-2 pr-2 pl-6.5 text-[22px] font-medium text-bg-base transition-colors hover:bg-bg-base/20"

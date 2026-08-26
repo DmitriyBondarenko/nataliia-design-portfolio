@@ -52,7 +52,7 @@ export function Hero() {
               ))}
               <a
                 href="#contact"
-                className="whitespace-nowrap rounded-pill bg-bg-base px-5 py-[11px] text-[22px] tracking-[0.02em] text-ink transition-colors hover:bg-bronze hover:text-bg-base"
+                className="whitespace-nowrap rounded-pill bg-bg-base px-5 py-[11px] text-[22px] tracking-[0.02em] text-ink transition-colors hover:bg-bronze-deep hover:text-bg-base"
               >
                 Звʼязатись зі мною
               </a>
@@ -82,7 +82,7 @@ export function Hero() {
               <a
                 href="#contact"
                 onClick={() => setMenuOpen(false)}
-                className="mt-2 rounded-pill bg-bg-base px-5 py-3 text-center text-[22px] tracking-[0.02em] text-ink transition-colors hover:bg-bronze hover:text-bg-base"
+                className="mt-2 rounded-pill bg-bg-base px-5 py-3 text-center text-[22px] tracking-[0.02em] text-ink transition-colors hover:bg-bronze-deep hover:text-bg-base"
               >
                 Звʼязатись зі мною
               </a>
@@ -93,7 +93,7 @@ export function Hero() {
         <div className="pointer-events-none relative z-[2] flex flex-1 flex-col justify-end px-[clamp(18px,4vw,46px)] pb-[clamp(24px,3vw,44px)]">
           <span className="mb-4.5 text-[26px] leading-none text-bronze">✳</span>
 
-          <h1 className="m-0 text-[clamp(40px,11.5vw,132px)] leading-[0.9] font-medium tracking-[-0.035em] text-balance text-bg-base">
+          <h1 className="m-0 text-[clamp(38px,9vw,108px)] leading-[0.9] font-medium tracking-[-0.035em] text-balance text-bg-base">
             Creative<span className="text-bronze">&nbsp;&amp;</span>
             <br />
             <span className="inline-block ml-[clamp(0px,6vw,90px)]">Motion</span>
@@ -107,10 +107,10 @@ export function Hero() {
             </p>
             <a
               href="#services"
-              className="pointer-events-auto flex items-center gap-3.5 rounded-pill bg-bg-base/90 py-2 pr-2 pl-6 text-[22px] text-ink transition-colors hover:bg-bg-base"
+              className="group pointer-events-auto flex items-center gap-3.5 rounded-pill bg-bronze-deep py-2 pr-2 pl-6 text-[22px] text-bg-base transition-colors hover:bg-bg-base hover:text-ink"
             >
               Переглянути послуги
-              <span className="flex h-10 w-10 items-center justify-center rounded-pill bg-bronze text-bg-base">
+              <span className="flex h-10 w-10 items-center justify-center rounded-pill bg-bg-base text-bronze-deep transition-colors group-hover:bg-bronze group-hover:text-bg-base">
                 <ArrowUpRightIcon size={20} />
               </span>
             </a>

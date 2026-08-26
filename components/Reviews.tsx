@@ -18,7 +18,7 @@ export function Reviews() {
         <div className="scrim-reviews pointer-events-none absolute inset-0" />
         <div className="pointer-events-none relative z-[2] p-[clamp(22px,4vw,52px)]">
           <span className="text-[24px] text-bronze">✳</span>
-          <h2 className="m-0 mt-3.5 text-[clamp(36px,8vw,96px)] leading-[0.94] font-normal tracking-[-0.04em] text-bg-base">
+          <h2 className="m-0 mt-3.5 text-[clamp(38px,9vw,108px)] leading-[0.94] font-normal tracking-[-0.04em] text-bg-base">
             відгуки
           </h2>
         </div>

@@ -7,7 +7,7 @@ export function Footer() {
         <div className="footer-glow pointer-events-none absolute inset-0" />
         <div className="relative">
           <span className="text-[24px] text-bronze">✳</span>
-          <h2 className="m-0 mt-4 text-[clamp(34px,7vw,92px)] leading-[0.95] font-normal tracking-[-0.04em] text-bg-base">
+          <h2 className="m-0 mt-4 text-[clamp(38px,9vw,108px)] leading-[0.95] font-normal tracking-[-0.04em] text-bg-base">
             Обговоримо
             <br />
             <span className="ml-[clamp(0px,5vw,70px)] inline-block">

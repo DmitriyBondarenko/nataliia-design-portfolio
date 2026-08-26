@@ -73,7 +73,7 @@ function pad(i: number) {
 }
 
 export function Terms() {
-  const [openIndex, setOpenIndex] = useState(0);
+  const [openIndex, setOpenIndex] = useState(-1);
 
   return (
     <section
@@ -86,7 +86,7 @@ export function Terms() {
           <p className="m-0 mb-3.5 text-[18px] text-label-lightest">
             Формат роботи
           </p>
-          <h2 className="m-0 text-[clamp(32px,5.4vw,66px)] leading-[0.96] font-normal tracking-[-0.04em] text-ink">
+          <h2 className="m-0 text-[clamp(38px,9vw,108px)] leading-[0.96] font-normal tracking-[-0.04em] text-ink">
             умови
             <br />
             <span className="text-bronze-deep">співпраці</span>
@@ -102,8 +102,8 @@ export function Terms() {
             return (
               <div
                 key={term.title}
-                className={`overflow-hidden rounded-card-sm border border-white/90 ${
-                  open ? "bg-white/92" : "bg-[rgba(236,233,230,0.7)]"
+                className={`overflow-hidden rounded-card-sm border border-white/90 transition-colors duration-200 ${
+                  open ? "bg-white" : "bg-[#F7F6F5] hover:bg-white"
                 }`}
               >
                 <button

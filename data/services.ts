@@ -60,7 +60,9 @@ function buildCases(
       kind,
       ratio,
       alt: `${altPrefix} ${i + 1}`,
-      ...(kind === "video" ? { poster: `/media/${id}.jpg` } : { src: `/media/${id}.jpg` }),
+      ...(kind === "video"
+        ? { poster: `/media/${id}.jpg`, src: `/media/${id}.mp4` }
+        : { src: `/media/${id}.jpg` }),
     };
   });
 }

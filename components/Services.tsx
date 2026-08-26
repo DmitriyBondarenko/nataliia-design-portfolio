@@ -24,17 +24,19 @@ const TAB_META: Record<ServiceTabId, { label: string; icon: ReactNode }> = {
 
 export function Services() {
   const [tabId, setTabId] = useState<ServiceTabId>("design");
-  const [svcIndex, setSvcIndex] = useState(0);
+  // null = no service card expanded (default state); index = that card is open
+  // and drives the showcase panel.
+  const [svcIndex, setSvcIndex] = useState<number | null>(null);
   const [format, setFormat] = useState<Ratio>("9 / 16");
   const [page, setPage] = useState(0);
   const [lightboxItem, setLightboxItem] = useState<MediaItem | null>(null);
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
 
   const tab = SERVICE_TABS.find((t) => t.id === tabId)!;
-  const service = tab.services[svcIndex];
-  const isDesign = service.key === "design";
+  const service = svcIndex !== null ? tab.services[svcIndex] : null;
+  const isDesign = service?.key === "design";
 
-  const media = mediaForService(service, format);
+  const media = service ? mediaForService(service, format) : [];
   const ratio = media[0]?.ratio ?? "9 / 16";
   const perPage = perPageFor(ratio);
   const pages = Math.max(1, Math.ceil(media.length / perPage));
@@ -47,11 +49,11 @@ export function Services() {
 
   function selectTab(id: ServiceTabId) {
     setTabId(id);
-    setSvcIndex(0);
+    setSvcIndex(null);
     setPage(0);
   }
   function selectService(i: number) {
-    setSvcIndex(i);
+    setSvcIndex((current) => (current === i ? null : i));
     setPage(0);
   }
   function selectFormat(f: Ratio) {
@@ -91,10 +93,10 @@ export function Services() {
     >
       <div className="rounded-panel-services border border-white/90 bg-[linear-gradient(180deg,#ECE9E6_0%,#F4F3EF_60%)] p-[clamp(24px,4vw,56px)]">
         <div className="flex flex-wrap items-start justify-between gap-5">
-          <h2 className="m-0 text-[80px] leading-[0.95] font-normal tracking-[-0.04em]">
+          <h2 className="m-0 text-[clamp(38px,9vw,108px)] leading-[0.95] font-normal tracking-[-0.04em]">
             послуги
             <br />
-            <span className="text-[80px] text-bronze-deep">та прайс</span>
+            <span className="text-[clamp(38px,9vw,108px)] text-bronze-deep">та прайс</span>
           </h2>
           <p className="m-0 text-[18px] text-label-light">Оберіть напрям</p>
         </div>
@@ -102,15 +104,21 @@ export function Services() {
         <div className="mt-[clamp(24px,3vw,40px)] flex flex-wrap gap-2.5">
           {SERVICE_TABS.map((t) => {
             const active = t.id === tabId;
+            const isDesignTab = t.id === "design";
+            const videoInactive = t.id === "video" && !active;
             return (
               <button
                 key={t.id}
                 type="button"
                 onClick={() => selectTab(t.id)}
                 className={`flex flex-[1_1_200px] items-center gap-3.5 rounded-card-sm border px-5.5 py-4.5 text-left text-[clamp(22px,1.6vw,24px)] font-medium tracking-[-0.01em] transition-all duration-200 ${
-                  active
-                    ? "border-ink bg-ink text-bg-base"
-                    : "border-ink/12 bg-white/60 text-ink"
+                  isDesignTab
+                    ? "border-ink bg-ink text-bg-base hover:bg-[#363636]"
+                    : active
+                      ? "border-ink bg-ink text-bg-base"
+                      : videoInactive
+                        ? "border-bronze-deep bg-bronze-deep text-bg-base hover:border-bronze hover:bg-bronze"
+                        : "border-ink/12 bg-white/60 text-ink"
                 }`}
               >
                 <span className="inline-flex text-[19px] opacity-90">
@@ -131,8 +139,8 @@ export function Services() {
                   key={sv.key}
                   className={`overflow-hidden rounded-card border transition-colors duration-200 ${
                     open
-                      ? "border-bronze/50 bg-white/92"
-                      : "border-ink/8 bg-white/45"
+                      ? "border-bronze/50 bg-white"
+                      : "border-ink/8 bg-[#F7F6F5] hover:bg-white"
                   }`}
                 >
                   <button
@@ -224,7 +232,7 @@ export function Services() {
 
           <div
             className={`glass-showcase relative flex flex-col rounded-panel-showcase p-[clamp(16px,2vw,24px)] ${
-              stretchPanel ? "self-stretch" : "self-start"
+              service && !stretchPanel ? "self-start" : "self-stretch"
             }`}
           >
             <div className="mb-4 flex items-center justify-between gap-3.5">
@@ -249,72 +257,94 @@ export function Services() {
                     })}
                   </div>
                 ) : null}
-                <p className="m-0 text-[18px] text-label">{service.title}</p>
+                {service ? (
+                  <p className="m-0 text-[18px] text-label">{service.title}</p>
+                ) : null}
               </div>
             </div>
 
-            <div
-              tabIndex={pages > 1 ? 0 : -1}
-              onKeyDown={onGalleryKeyDown}
-              onTouchStart={onTouchStart}
-              onTouchEnd={onTouchEnd}
-              className="relative overflow-hidden rounded-frame bg-ink/6 outline-none"
-            >
-              <div
-                className="flex items-stretch transition-transform duration-[480ms] ease-[cubic-bezier(0.65,0.05,0.36,1)]"
-                style={{
-                  flexWrap: perPage === 4 ? "wrap" : "nowrap",
-                  gap: perPage === 1 ? "0px" : "12px",
-                }}
-              >
-                {pageItems.map((item) => (
+            {service ? (
+              <>
+                <div
+                  tabIndex={pages > 1 ? 0 : -1}
+                  onKeyDown={onGalleryKeyDown}
+                  onTouchStart={onTouchStart}
+                  onTouchEnd={onTouchEnd}
+                  className="relative overflow-hidden rounded-frame bg-ink/6 outline-none"
+                >
                   <div
-                    key={item.id}
-                    onClick={() => setLightboxItem(item)}
-                    className="relative min-w-0 flex-none cursor-zoom-in"
+                    className="flex items-stretch transition-transform duration-[480ms] ease-[cubic-bezier(0.65,0.05,0.36,1)]"
                     style={{
-                      width: perPage === 1 ? "100%" : "calc(50% - 6px)",
-                      aspectRatio: item.ratio,
+                      flexWrap: perPage === 4 ? "wrap" : "nowrap",
+                      gap: perPage === 1 ? "0px" : "12px",
                     }}
                   >
-                    <MediaPlaceholder
-                      ratio={item.ratio}
-                      kind={item.kind}
-                      alt={item.alt}
-                      src={item.src}
-                      poster={item.poster}
-                      fill
-                    />
+                    {pageItems.map((item) => (
+                      <div
+                        key={item.id}
+                        onClick={() => setLightboxItem(item)}
+                        className={`relative min-w-0 flex-none ${
+                          item.kind === "video" ? "cursor-pointer" : "cursor-zoom-in"
+                        }`}
+                        style={{
+                          width: perPage === 1 ? "100%" : "calc(50% - 6px)",
+                          aspectRatio: item.ratio,
+                        }}
+                      >
+                        <MediaPlaceholder
+                          ratio={item.ratio}
+                          kind={item.kind}
+                          alt={item.alt}
+                          src={item.src}
+                          poster={item.poster}
+                          fill
+                        />
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-            </div>
+                </div>
 
-            {pages > 1 ? (
-              <div className="mt-3.5 flex items-center justify-between gap-3.5">
-                <p className="m-0 text-[18px] tracking-[0.08em] text-label">
-                  {currentPage + 1} / {pages}
-                </p>
-                <div className="flex gap-2">
-                  <button
-                    type="button"
-                    onClick={prevPage}
-                    aria-label="Попередній приклад"
-                    className="flex h-10.5 w-10.5 items-center justify-center rounded-pill border border-ink/16 bg-white/70 text-ink transition-colors hover:bg-ink hover:text-bg-base"
-                  >
-                    <ArrowLeftIcon size={20} />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={nextPage}
-                    aria-label="Наступний приклад"
-                    className="flex h-10.5 w-10.5 items-center justify-center rounded-pill border border-ink/16 bg-white/70 text-ink transition-colors hover:bg-ink hover:text-bg-base"
-                  >
-                    <ArrowRightIcon size={20} />
-                  </button>
+                {pages > 1 ? (
+                  <div className="mt-3.5 flex items-center justify-between gap-3.5">
+                    <p className="m-0 text-[18px] tracking-[0.08em] text-label">
+                      {currentPage + 1} / {pages}
+                    </p>
+                    <div className="flex gap-2">
+                      <button
+                        type="button"
+                        onClick={prevPage}
+                        aria-label="Попередній приклад"
+                        className="flex h-10.5 w-10.5 items-center justify-center rounded-pill border border-ink/16 bg-white/70 text-ink transition-colors hover:bg-ink hover:text-bg-base"
+                      >
+                        <ArrowLeftIcon size={20} />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={nextPage}
+                        aria-label="Наступний приклад"
+                        className="flex h-10.5 w-10.5 items-center justify-center rounded-pill border border-ink/16 bg-white/70 text-ink transition-colors hover:bg-ink hover:text-bg-base"
+                      >
+                        <ArrowRightIcon size={20} />
+                      </button>
+                    </div>
+                  </div>
+                ) : null}
+              </>
+            ) : (
+              <div className="flex min-h-[260px] flex-1 flex-col items-center justify-center gap-4 rounded-frame bg-ink/6 px-6 text-center">
+                <span className="flex h-12 w-12 items-center justify-center rounded-pill border border-ink/10 bg-white/70 text-bronze-deep">
+                  <CursorIcon size={19} />
+                </span>
+                <div>
+                  <p className="m-0 text-[20px] font-medium text-ink">
+                    Оберіть послугу
+                  </p>
+                  <p className="m-0 mt-1 text-[18px] text-label">
+                    щоб побачити приклади робіт і ціну
+                  </p>
                 </div>
               </div>
-            ) : null}
+            )}
             <div className="min-h-0 flex-1" />
           </div>
         </div>

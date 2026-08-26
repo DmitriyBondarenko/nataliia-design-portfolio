@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { MediaItem } from "@/data/services";
 import { MediaPlaceholder } from "./MediaPlaceholder";
 
@@ -12,6 +12,8 @@ export function Lightbox({
   onClose: () => void;
 }) {
   const closeRef = useRef<HTMLButtonElement>(null);
+  const [videoFailed, setVideoFailed] = useState(false);
+  const showVideo = item.kind === "video" && !!item.src && !videoFailed;
 
   useEffect(() => {
     closeRef.current?.focus();
@@ -35,15 +37,27 @@ export function Lightbox({
         className="relative max-h-[90vh] w-[min(1200px,94vw)] overflow-hidden rounded-[20px]"
         style={{ aspectRatio: item.ratio }}
       >
-        <MediaPlaceholder
-          ratio={item.ratio}
-          kind={item.kind}
-          alt={item.alt}
-          src={item.src}
-          poster={item.poster}
-          fit="contain"
-          fill
-        />
+        {showVideo ? (
+          <video
+            src={item.src}
+            poster={item.poster}
+            controls
+            playsInline
+            preload="metadata"
+            className="h-full w-full object-contain"
+            onError={() => setVideoFailed(true)}
+          />
+        ) : (
+          <MediaPlaceholder
+            ratio={item.ratio}
+            kind={item.kind}
+            alt={item.alt}
+            src={item.src}
+            poster={item.poster}
+            fit="contain"
+            fill
+          />
+        )}
         <button
           ref={closeRef}
           type="button"

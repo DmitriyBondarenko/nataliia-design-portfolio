@@ -21,7 +21,7 @@ export function About() {
       </div>
 
       <div className="mt-[clamp(34px,5vw,64px)] grid grid-cols-[repeat(auto-fit,minmax(290px,1fr))] items-start gap-[clamp(24px,3vw,54px)]">
-        <p className="m-0 text-[22px] leading-[1.45] font-normal tracking-[-0.015em]">
+        <p className="m-0 text-[20px] leading-[1.45] font-normal tracking-[-0.015em]">
           Допомагаю експертам та бізнесам вибудувати
           <span className="mx-2 inline-flex -translate-y-[5px] items-center justify-center align-middle">
             <SystemIcon size={26} />
@@ -29,7 +29,7 @@ export function About() {
           цілісну візуальну систему: рекламні креативи, упаковка, презентації та{" "}
           <span className="text-bronze-deep">монтаж відео</span>.
         </p>
-        <p className="m-0 max-w-[46ch] text-[22px] leading-[1.6] font-normal text-body-muted-2">
+        <p className="m-0 max-w-[46ch] text-[20px] leading-[1.6] font-normal text-body-muted-2">
           <b>Закриваю весь спектр задач для соцмереж в єдиній естетиці</b> — вам
           більше не доведеться збирати команду з різних фрілансерів та
           контролювати розбіжності в стилі.

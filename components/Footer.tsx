@@ -14,7 +14,7 @@ export function Footer() {
               ваш проект?
             </span>
           </h2>
-          <p className="m-0 mt-[clamp(20px,3vw,34px)] max-w-[68ch] text-[22px] leading-[1.55] text-bg-base/72">
+          <p className="m-0 mt-[clamp(20px,3vw,34px)] max-w-[68ch] text-[20px] leading-[1.55] text-bg-base/72">
             Напишіть мені в Telegram або Instagram — розберемо ваші задачі,
             підберемо оптимальний формат та розрахуємо точну вартість.
           </p>

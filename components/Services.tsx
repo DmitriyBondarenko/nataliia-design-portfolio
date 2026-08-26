@@ -178,11 +178,11 @@ export function Services() {
                           key={p.label}
                           className="flex items-baseline gap-2.5 border-b border-ink/7 py-1.5"
                         >
-                          <span className="text-[22px] text-body-muted">
+                          <span className="text-[20px] text-body-muted">
                             {p.label}
                           </span>
                           <span className="h-px flex-1" />
-                          <span className="text-[22px] font-semibold tracking-[-0.01em] whitespace-nowrap">
+                          <span className="text-[20px] font-semibold tracking-[-0.01em] whitespace-nowrap">
                             {p.value}
                           </span>
                         </div>
@@ -190,7 +190,7 @@ export function Services() {
 
                       {sv.packages ? (
                         <div className="mt-4.5 rounded-plate border border-ink/6 bg-bg-raised p-4.5">
-                          <p className="m-0 mb-2.5 text-[22px] font-semibold tracking-[-0.01em]">
+                          <p className="m-0 mb-2.5 text-[20px] font-semibold tracking-[-0.01em]">
                             {sv.packagesTitle}
                           </p>
                           {sv.packages.map((pk) => (
@@ -198,11 +198,11 @@ export function Services() {
                               key={pk.label}
                               className="flex items-baseline gap-2.5 py-1.5"
                             >
-                              <span className="text-[22px] text-body-muted">
+                              <span className="text-[20px] text-body-muted">
                                 {pk.label}
                               </span>
                               <span className="flex-1 border-b border-dotted border-ink/20" />
-                              <span className="text-[22px] font-semibold">
+                              <span className="text-[20px] font-semibold">
                                 {pk.value}
                               </span>
                             </div>

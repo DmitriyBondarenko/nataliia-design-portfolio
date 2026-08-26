@@ -127,7 +127,7 @@ export function Terms() {
                     {term.rows.map((row, j) => (
                       <div
                         key={j}
-                        className="flex gap-3 text-[22px] leading-[1.5] text-body-muted"
+                        className="flex gap-3 text-[20px] leading-[1.5] text-body-muted"
                       >
                         <span className="text-bronze">✳</span>
                         <p className="m-0">

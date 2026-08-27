@@ -60,9 +60,13 @@ export function Lightbox({
         {showVideo ? (
           <video
             key={item.id}
+            ref={(el) => {
+              el?.play().catch(() => {});
+            }}
             src={item.src}
             poster={item.poster}
             controls
+            autoPlay
             playsInline
             preload="metadata"
             className="h-full w-full object-contain"

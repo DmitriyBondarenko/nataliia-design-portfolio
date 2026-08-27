@@ -2,6 +2,8 @@
 
 import {
   useEffect,
+  useLayoutEffect,
+  useRef,
   useState,
   type KeyboardEvent,
   type ReactNode,
@@ -44,6 +46,11 @@ export function Services() {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
   const [isPaused, setIsPaused] = useState(false);
+  // Bumped each time the lightbox closes, so the active rail segment
+  // remounts and restarts its countdown from 0 (rather than resuming from
+  // wherever it was frozen while the video played).
+  const [restartTick, setRestartTick] = useState(0);
+  const lightboxWasOpenRef = useRef(false);
 
   const tab = SERVICE_TABS.find((t) => t.id === tabId)!;
   const service = svcIndex !== null ? tab.services[svcIndex] : null;
@@ -59,11 +66,16 @@ export function Services() {
     currentPage * perPage + perPage
   );
   const stretchPanel = !(isDesign && format === "9 / 16");
+  const lightboxOpen = lightboxIndex !== null;
+  // While the lightbox is open, treat the rail as paused (same as
+  // hover/focus/touch) so the gallery doesn't advance behind the viewer.
+  const railPaused = isPaused || lightboxOpen;
 
-  // Auto-advances the case gallery every 4s; pauses on hover/focus/touch and
-  // restarts from 0 whenever the page changes (manually or automatically).
+  // Auto-advances the case gallery every 4s; pauses on hover/focus/touch/
+  // lightbox and restarts from 0 whenever the page changes (manually or
+  // automatically) or the lightbox closes.
   useEffect(() => {
-    if (pages <= 1 || isPaused) return;
+    if (pages <= 1 || railPaused) return;
     if (
       typeof window !== "undefined" &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches
@@ -74,7 +86,16 @@ export function Services() {
       setPage((p) => (Math.min(p, pages - 1) + 1) % pages);
     }, 4000);
     return () => clearTimeout(id);
-  }, [currentPage, pages, isPaused]);
+  }, [currentPage, pages, railPaused, restartTick]);
+
+  // Marks a fresh countdown (via restartTick) the moment the lightbox closes,
+  // so the segment that was frozen mid-fill starts over instead of resuming.
+  useLayoutEffect(() => {
+    if (lightboxWasOpenRef.current && !lightboxOpen) {
+      setRestartTick((t) => t + 1);
+    }
+    lightboxWasOpenRef.current = lightboxOpen;
+  }, [lightboxOpen]);
 
   function selectTab(id: ServiceTabId) {
     setTabId(id);
@@ -283,7 +304,7 @@ export function Services() {
                     })}
                   </div>
                 ) : null}
-                {service ? (
+                {service && !isDesign ? (
                   <p className="m-0 text-[18px] text-label">{service.title}</p>
                 ) : null}
               </div>
@@ -390,13 +411,13 @@ export function Services() {
                           className="h-[3px] flex-1 cursor-pointer overflow-hidden rounded-pill bg-ink/12"
                         >
                           <span
-                            key={isActive ? currentPage : "static"}
+                            key={isActive ? `${currentPage}-${restartTick}` : "static"}
                             className={`block h-full rounded-pill bg-ink motion-reduce:!w-full motion-reduce:!animate-none ${
                               isDone
                                 ? "w-full"
                                 : isActive
                                   ? `w-0 animate-[rail-fill_4000ms_linear_forwards] ${
-                                      isPaused ? "[animation-play-state:paused]" : ""
+                                      railPaused ? "[animation-play-state:paused]" : ""
                                     }`
                                   : "w-0"
                             }`}

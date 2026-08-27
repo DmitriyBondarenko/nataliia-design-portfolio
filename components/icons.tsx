@@ -62,7 +62,7 @@ export function SystemIcon({ size = 26 }: { size?: number }) {
       height={size}
       viewBox="0 0 24 24"
       fill="none"
-      stroke="#B88B5D"
+      stroke="#B36B27"
       strokeWidth={1.4}
       strokeLinecap="round"
       aria-hidden="true"
@@ -93,6 +93,24 @@ export function PlayIcon({ size = 19 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
       <path d="M7 4.5v15l13-7.5-13-7.5Z" />
+    </svg>
+  );
+}
+
+export function PlusIcon({ size = 16 }: { size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2.2}
+      strokeLinecap="round"
+      aria-hidden="true"
+    >
+      <path d="M12 5v14" />
+      <path d="M5 12h14" />
     </svg>
   );
 }

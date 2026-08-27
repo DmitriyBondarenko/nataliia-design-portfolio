@@ -17,7 +17,7 @@ export function Hero() {
   return (
     <section
       data-screen-label="Hero"
-      className="relative flex min-h-[92dvh] px-3.5 pt-3.5 pb-7"
+      className="relative flex min-h-[calc(92dvh+100px)] px-3.5 pt-3.5 pb-7"
     >
       <div className="relative flex flex-1 flex-col overflow-hidden rounded-panel-lg">
         <div className="absolute inset-0">

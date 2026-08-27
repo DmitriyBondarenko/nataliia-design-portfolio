@@ -30,7 +30,7 @@ export function Lightbox({
       aria-modal="true"
       aria-label={item.alt}
       onClick={onClose}
-      className="fixed inset-0 z-[60] flex cursor-zoom-out items-center justify-center bg-[rgba(24,24,24,0.86)] p-5 backdrop-blur-[10px]"
+      className="fixed inset-0 z-[60] flex cursor-zoom-out items-center justify-center bg-[rgba(18,18,18,0.86)] p-5 backdrop-blur-[10px]"
     >
       <div
         onClick={(e) => e.stopPropagation()}

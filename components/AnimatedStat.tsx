@@ -8,6 +8,10 @@ function easeOutExpo(t: number) {
   return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
 }
 
+function formatThousands(n: number) {
+  return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+}
+
 // Counts up from 0 to the number in `value` (e.g. "2800+" -> 0..2800, "+" kept
 // static) once the card scrolls into view. Skips the animation entirely under
 // prefers-reduced-motion, per README § "Interactions & Behavior".
@@ -35,14 +39,14 @@ export function AnimatedStat({ value }: { value: string }) {
           "(prefers-reduced-motion: reduce)"
         ).matches;
         if (reduceMotion) {
-          setDisplay(String(target));
+          setDisplay(formatThousands(target));
           return;
         }
 
         const start = performance.now();
         const tick = (now: number) => {
           const progress = Math.min((now - start) / DURATION_MS, 1);
-          setDisplay(String(Math.round(target * easeOutExpo(progress))));
+          setDisplay(formatThousands(Math.round(target * easeOutExpo(progress))));
           if (progress < 1) requestAnimationFrame(tick);
         };
         requestAnimationFrame(tick);

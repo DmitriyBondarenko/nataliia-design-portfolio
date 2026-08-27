@@ -1,4 +1,5 @@
 import { MediaPlaceholder } from "./MediaPlaceholder";
+import { Reveal } from "./Reveal";
 
 export function Reviews() {
   return (
@@ -7,7 +8,7 @@ export function Reviews() {
       data-screen-label="Testimonials"
       className="px-3.5 py-[clamp(20px,3vw,40px)]"
     >
-      <div className="relative flex min-h-[88dvh] items-end overflow-hidden rounded-panel-lg">
+      <Reveal className="relative flex aspect-[4/3] items-end overflow-hidden rounded-panel-lg md:aspect-[3/2] lg:aspect-auto lg:min-h-[88dvh]">
         <MediaPlaceholder
           ratio="4 / 5"
           kind="image"
@@ -22,7 +23,7 @@ export function Reviews() {
             відгуки
           </h2>
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }

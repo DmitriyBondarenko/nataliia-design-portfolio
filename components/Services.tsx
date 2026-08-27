@@ -12,6 +12,7 @@ import {
 import { ArrowLeftIcon, ArrowRightIcon, ArrowUpRightIcon, CursorIcon, PlayIcon } from "./icons";
 import { MediaPlaceholder } from "./MediaPlaceholder";
 import { Lightbox } from "./Lightbox";
+import { Reveal } from "./Reveal";
 
 function pad(i: number) {
   return String(i + 1).padStart(2, "0");
@@ -91,7 +92,7 @@ export function Services() {
       data-screen-label="Services"
       className="px-[clamp(14px,4vw,60px)] py-[clamp(48px,7vw,110px)]"
     >
-      <div className="rounded-panel-services border border-white/90 bg-[linear-gradient(180deg,#ECE9E6_0%,#F4F3EF_60%)] p-[clamp(24px,4vw,56px)]">
+      <div className="rounded-panel-services border border-white/90 bg-[linear-gradient(180deg,#F1F0EC_0%,#FAFAF7_60%)] p-[clamp(24px,4vw,56px)]">
         <div className="flex flex-wrap items-start justify-between gap-5">
           <h2 className="m-0 text-[clamp(38px,9vw,108px)] leading-[0.95] font-normal tracking-[-0.04em]">
             послуги
@@ -102,39 +103,41 @@ export function Services() {
         </div>
 
         <div className="mt-[clamp(24px,3vw,40px)] flex flex-wrap gap-2.5">
-          {SERVICE_TABS.map((t) => {
+          {SERVICE_TABS.map((t, i) => {
             const active = t.id === tabId;
             return (
-              <button
-                key={t.id}
-                type="button"
-                onClick={() => selectTab(t.id)}
-                className={`flex flex-[1_1_200px] items-center gap-3.5 rounded-card-sm border border-ink px-5.5 py-4.5 text-left text-[clamp(22px,1.6vw,24px)] font-medium tracking-[-0.01em] transition-all duration-200 ${
-                  active
-                    ? "bg-ink text-bg-base hover:bg-[#363636]"
-                    : "bg-[#F1EFEB] text-ink"
-                }`}
-              >
-                <span className="inline-flex text-[19px] opacity-90">
-                  {TAB_META[t.id].icon}
-                </span>
-                {TAB_META[t.id].label}
-              </button>
+              <Reveal key={t.id} delay={i * 80} className="flex-[1_1_200px]">
+                <button
+                  type="button"
+                  onClick={() => selectTab(t.id)}
+                  className={`flex w-full items-center gap-3.5 rounded-card-sm border border-ink px-5.5 py-4.5 text-left text-[clamp(22px,1.6vw,24px)] font-medium tracking-[-0.01em] transition-all duration-200 ${
+                    active
+                      ? "bg-ink text-bg-base hover:bg-[#262626]"
+                      : "bg-[#F1F0EC] text-ink"
+                  }`}
+                >
+                  <span className="inline-flex text-[19px] opacity-90">
+                    {TAB_META[t.id].icon}
+                  </span>
+                  {TAB_META[t.id].label}
+                </button>
+              </Reveal>
             );
           })}
         </div>
 
-        <div className="mt-4 grid grid-cols-[repeat(auto-fit,minmax(320px,1fr))] items-stretch gap-4">
-          <div className="flex flex-col gap-2.5">
+        <div className="mt-4 grid grid-cols-1 items-stretch gap-4 md:grid-cols-[repeat(auto-fit,minmax(320px,1fr))]">
+          <div className="order-2 flex flex-col gap-2.5 md:order-none">
             {tab.services.map((sv, i) => {
               const open = i === svcIndex;
               return (
-                <div
+                <Reveal
                   key={sv.key}
+                  delay={i * 70}
                   className={`overflow-hidden rounded-card border transition-colors duration-200 ${
                     open
                       ? "border-bronze/50 bg-white"
-                      : "border-ink/8 bg-[#F7F6F5] hover:bg-white"
+                      : "border-ink/8 bg-[#F6F5F2] hover:bg-white"
                   }`}
                 >
                   <button
@@ -219,13 +222,14 @@ export function Services() {
                       ) : null}
                     </div>
                   ) : null}
-                </div>
+                </Reveal>
               );
             })}
           </div>
 
-          <div
-            className={`glass-showcase relative flex flex-col rounded-panel-showcase p-[clamp(16px,2vw,24px)] ${
+          <Reveal
+            delay={120}
+            className={`glass-showcase relative order-1 flex flex-col rounded-panel-showcase p-[clamp(16px,2vw,24px)] md:order-none ${
               service && !stretchPanel ? "self-start" : "self-stretch"
             }`}
           >
@@ -340,7 +344,7 @@ export function Services() {
               </div>
             )}
             <div className="min-h-0 flex-1" />
-          </div>
+          </Reveal>
         </div>
       </div>
 

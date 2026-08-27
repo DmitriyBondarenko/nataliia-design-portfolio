@@ -56,18 +56,18 @@ export function MediaPlaceholder({
             onError={() => setFailed(true)}
           />
           {kind === "video" ? (
-            <span className="absolute flex h-9 w-9 items-center justify-center rounded-full bg-ink/75 text-bg-base">
+            <span className="absolute flex h-9 w-9 items-center justify-center rounded-full bg-tally text-bg-base">
               <PlayIcon size={15} />
             </span>
           ) : null}
         </>
       ) : (
         <div
-          className={`flex h-full w-full items-center justify-center bg-[rgba(43,43,43,0.045)] bg-[repeating-linear-gradient(135deg,rgba(43,43,43,0.07)_0px,rgba(43,43,43,0.07)_1.5px,transparent_1.5px,transparent_13px)]`}
+          className={`flex h-full w-full items-center justify-center bg-[rgba(18,18,18,0.045)] bg-[repeating-linear-gradient(135deg,rgba(18,18,18,0.07)_0px,rgba(18,18,18,0.07)_1.5px,transparent_1.5px,transparent_13px)]`}
         >
           <div className="flex flex-col items-center gap-2 px-3 text-center">
             {kind === "video" ? (
-              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-ink/75 text-bg-base">
+              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-tally text-bg-base">
                 <PlayIcon size={15} />
               </span>
             ) : null}

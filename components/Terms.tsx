@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { PlusIcon } from "./icons";
+import { Reveal } from "./Reveal";
 
 type TermRow = { lead: string; text: string };
 type TermItem = { title: string; rows: TermRow[] };
@@ -10,7 +12,7 @@ const TERMS: TermItem[] = [
     title: "Оплата та старт проєкту",
     rows: [
       {
-        lead: "Предоплата: ",
+        lead: "Передплата: ",
         text: "Робота починається після внесення 50% передплати та надання повного ТЗ із матеріалами. Друга частина оплачується після фінального затвердження проєкту (до відправки вихідних файлів у високій якості).",
       },
       {
@@ -68,10 +70,6 @@ const TERMS: TermItem[] = [
   },
 ];
 
-function pad(i: number) {
-  return String(i + 1).padStart(2, "0");
-}
-
 export function Terms() {
   const [openIndex, setOpenIndex] = useState(-1);
 
@@ -96,51 +94,46 @@ export function Terms() {
           </span>
         </div>
 
-        <div className="flex flex-col gap-2.5">
+        <div className="flex flex-col border-t border-ink/10">
           {TERMS.map((term, i) => {
             const open = openIndex === i;
             return (
-              <div
-                key={term.title}
-                className={`overflow-hidden rounded-card-sm border border-white/90 transition-colors duration-200 ${
-                  open ? "bg-white" : "bg-[#F7F6F5] hover:bg-white"
-                }`}
-              >
+              <Reveal key={term.title} delay={i * 70} className="border-b border-ink/10">
                 <button
                   type="button"
                   onClick={() => setOpenIndex(open ? -1 : i)}
                   aria-expanded={open}
-                  className="flex w-full items-center gap-4 bg-transparent px-5.5 py-5.5 text-left font-inherit text-inherit"
+                  className="flex w-full items-center gap-4 bg-transparent py-5.5 text-left font-inherit text-inherit transition-colors hover:text-bronze-deep"
                 >
-                  <span className="text-[18px] tracking-[0.12em] text-label-lightest">
-                    {pad(i)}
-                  </span>
                   <span className="flex-1 text-[clamp(22px,1.6vw,24px)] font-medium tracking-[-0.02em]">
                     {term.title}
                   </span>
-                  <span className="text-[20px] text-bronze-deep">
-                    {open ? "−" : "+"}
+                  <span
+                    className={`flex h-6 w-6 flex-none items-center justify-center text-label-lightest transition-transform duration-200 ${
+                      open ? "rotate-45 text-bronze-deep" : ""
+                    }`}
+                  >
+                    <PlusIcon size={16} />
                   </span>
                 </button>
                 {open ? (
-                  <div className="flex flex-col gap-3 px-5.5 pb-6">
-                    {term.rows.map((row, j) => (
-                      <div
-                        key={j}
-                        className="flex gap-3 text-[20px] leading-[1.5] text-body-muted"
-                      >
-                        <span className="text-bronze">✳︎</span>
-                        <p className="m-0">
+                  <div className="pb-6">
+                    <div className="flex flex-col gap-3 border-l-2 border-bronze/25 pl-4">
+                      {term.rows.map((row, j) => (
+                        <p
+                          key={j}
+                          className="m-0 text-[20px] leading-[1.5] text-body-muted"
+                        >
                           <span className="font-semibold text-ink">
                             {row.lead}
                           </span>
                           {row.text}
                         </p>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
                 ) : null}
-              </div>
+              </Reveal>
             );
           })}
         </div>

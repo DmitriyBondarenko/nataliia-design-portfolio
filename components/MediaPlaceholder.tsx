@@ -20,6 +20,8 @@ export function MediaPlaceholder({
   /** Fill the positioned parent instead of sizing by aspect-ratio — for full-bleed backgrounds. */
   fill = false,
   className = "",
+  /** Art-directed crops swapped in by viewport width via a <picture> element. */
+  responsiveSrc,
 }: {
   ratio: Ratio;
   alt: string;
@@ -30,6 +32,7 @@ export function MediaPlaceholder({
   position?: string;
   fill?: boolean;
   className?: string;
+  responsiveSrc?: { mobile: string; tablet: string };
 }) {
   const [failed, setFailed] = useState(false);
   const imageSrc = kind === "video" ? poster : src;
@@ -46,15 +49,31 @@ export function MediaPlaceholder({
     >
       {showImage ? (
         <>
-          <Image
-            src={imageSrc}
-            alt={alt}
-            fill
-            sizes="(max-width: 768px) 100vw, 50vw"
-            className={fit === "contain" ? "object-contain" : "object-cover"}
-            style={position ? { objectPosition: position } : undefined}
-            onError={() => setFailed(true)}
-          />
+          {responsiveSrc ? (
+            <picture>
+              <source media="(max-width: 767px)" srcSet={responsiveSrc.mobile} />
+              <source media="(max-width: 1023px)" srcSet={responsiveSrc.tablet} />
+              <Image
+                src={imageSrc}
+                alt={alt}
+                fill
+                sizes="100vw"
+                className={fit === "contain" ? "object-contain" : "object-cover"}
+                style={position ? { objectPosition: position } : undefined}
+                onError={() => setFailed(true)}
+              />
+            </picture>
+          ) : (
+            <Image
+              src={imageSrc}
+              alt={alt}
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className={fit === "contain" ? "object-contain" : "object-cover"}
+              style={position ? { objectPosition: position } : undefined}
+              onError={() => setFailed(true)}
+            />
+          )}
           {kind === "video" ? (
             <span className="absolute flex h-9 w-9 items-center justify-center rounded-full bg-tally text-bg-base">
               <PlayIcon size={15} />

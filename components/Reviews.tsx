@@ -8,12 +8,16 @@ export function Reviews() {
       data-screen-label="Testimonials"
       className="px-3.5 py-[clamp(20px,3vw,40px)]"
     >
-      <Reveal className="relative flex aspect-[4/3] items-end overflow-hidden rounded-panel-lg md:aspect-[3/2] lg:aspect-auto lg:min-h-[88dvh]">
+      <Reveal className="relative flex aspect-[4/3] items-end overflow-hidden rounded-panel-lg md:aspect-[3/2] lg:aspect-[16/9]">
         <MediaPlaceholder
           ratio="4 / 5"
           kind="image"
           alt="Стіна скриншотів відгуків клієнтів"
-          src="/media/reviews.jpg"
+          src="/media/reviews.webp"
+          responsiveSrc={{
+            mobile: "/media/reviews-mobile.webp",
+            tablet: "/media/reviews-tablet.webp",
+          }}
           fill
         />
         <div className="scrim-reviews pointer-events-none absolute inset-0" />

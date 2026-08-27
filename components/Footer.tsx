@@ -20,7 +20,7 @@ export function Footer() {
           </p>
           <div className="mt-[clamp(26px,4vw,44px)] flex flex-wrap gap-3">
             <a
-              href="https://t.me/natalii_bnd"
+              href="https://t.me/m/J25HVVblMTBi"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-3.5 rounded-pill bg-bg-base py-2 pr-2 pl-6.5 text-[20px] font-medium text-ink transition-colors hover:bg-bronze hover:text-bg-base"

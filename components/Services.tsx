@@ -1,15 +1,26 @@
 "use client";
 
-import { useState, type KeyboardEvent, type ReactNode, type TouchEvent } from "react";
+import {
+  useEffect,
+  useState,
+  type KeyboardEvent,
+  type ReactNode,
+  type TouchEvent,
+} from "react";
 import {
   SERVICE_TABS,
   mediaForService,
   perPageFor,
-  type MediaItem,
   type Ratio,
   type ServiceTabId,
 } from "@/data/services";
-import { ArrowLeftIcon, ArrowRightIcon, ArrowUpRightIcon, CursorIcon, PlayIcon } from "./icons";
+import {
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  ArrowUpRightIcon,
+  CursorIcon,
+  PlayIcon,
+} from "./icons";
 import { MediaPlaceholder } from "./MediaPlaceholder";
 import { Lightbox } from "./Lightbox";
 import { Reveal } from "./Reveal";
@@ -30,8 +41,9 @@ export function Services() {
   const [svcIndex, setSvcIndex] = useState<number | null>(null);
   const [format, setFormat] = useState<Ratio>("9 / 16");
   const [page, setPage] = useState(0);
-  const [lightboxItem, setLightboxItem] = useState<MediaItem | null>(null);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
+  const [isPaused, setIsPaused] = useState(false);
 
   const tab = SERVICE_TABS.find((t) => t.id === tabId)!;
   const service = svcIndex !== null ? tab.services[svcIndex] : null;
@@ -47,6 +59,22 @@ export function Services() {
     currentPage * perPage + perPage
   );
   const stretchPanel = !(isDesign && format === "9 / 16");
+
+  // Auto-advances the case gallery every 4s; pauses on hover/focus/touch and
+  // restarts from 0 whenever the page changes (manually or automatically).
+  useEffect(() => {
+    if (pages <= 1 || isPaused) return;
+    if (
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      return;
+    }
+    const id = setTimeout(() => {
+      setPage((p) => (Math.min(p, pages - 1) + 1) % pages);
+    }, 4000);
+    return () => clearTimeout(id);
+  }, [currentPage, pages, isPaused]);
 
   function selectTab(id: ServiceTabId) {
     setTabId(id);
@@ -249,7 +277,7 @@ export function Services() {
                             active ? "bg-ink text-bg-base" : "bg-transparent text-label"
                           }`}
                         >
-                          {f === "4 / 5" ? "4:5" : "9:16"}
+                          {f === "4 / 5" ? "Каруселі" : "Креативи"}
                         </button>
                       );
                     })}
@@ -262,12 +290,23 @@ export function Services() {
             </div>
 
             {service ? (
-              <>
+              <div
+                onMouseEnter={() => setIsPaused(true)}
+                onMouseLeave={() => setIsPaused(false)}
+              >
                 <div
                   tabIndex={pages > 1 ? 0 : -1}
                   onKeyDown={onGalleryKeyDown}
-                  onTouchStart={onTouchStart}
-                  onTouchEnd={onTouchEnd}
+                  onTouchStart={(e) => {
+                    onTouchStart(e);
+                    setIsPaused(true);
+                  }}
+                  onTouchEnd={(e) => {
+                    onTouchEnd(e);
+                    setIsPaused(false);
+                  }}
+                  onFocus={() => setIsPaused(true)}
+                  onBlur={() => setIsPaused(false)}
                   className="relative overflow-hidden rounded-frame bg-ink/6 outline-none"
                 >
                   <div
@@ -277,10 +316,12 @@ export function Services() {
                       gap: perPage === 1 ? "0px" : "12px",
                     }}
                   >
-                    {pageItems.map((item) => (
+                    {pageItems.map((item, i) => (
                       <div
                         key={item.id}
-                        onClick={() => setLightboxItem(item)}
+                        onClick={() =>
+                          setLightboxIndex(currentPage * perPage + i)
+                        }
                         className={`relative min-w-0 flex-none ${
                           item.kind === "video" ? "cursor-pointer" : "cursor-zoom-in"
                         }`}
@@ -300,34 +341,72 @@ export function Services() {
                       </div>
                     ))}
                   </div>
+
+                  {pages > 1 ? (
+                    <>
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          prevPage();
+                        }}
+                        aria-label="Попередній приклад"
+                        className="absolute top-1/2 left-3 flex h-10.5 w-10.5 -translate-y-1/2 cursor-pointer items-center justify-center rounded-pill bg-ink/70 text-bg-base transition-colors hover:bg-ink"
+                      >
+                        <ArrowLeftIcon size={18} />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          nextPage();
+                        }}
+                        aria-label="Наступний приклад"
+                        className="absolute top-1/2 right-3 flex h-10.5 w-10.5 -translate-y-1/2 cursor-pointer items-center justify-center rounded-pill bg-ink/70 text-bg-base transition-colors hover:bg-ink"
+                      >
+                        <ArrowRightIcon size={18} />
+                      </button>
+                    </>
+                  ) : null}
                 </div>
 
                 {pages > 1 ? (
-                  <div className="mt-3.5 flex items-center justify-between gap-3.5">
-                    <p className="m-0 text-[18px] tracking-[0.08em] text-label">
-                      {currentPage + 1} / {pages}
-                    </p>
-                    <div className="flex gap-2">
-                      <button
-                        type="button"
-                        onClick={prevPage}
-                        aria-label="Попередній приклад"
-                        className="flex h-10.5 w-10.5 items-center justify-center rounded-pill border border-ink/16 bg-white/70 text-ink transition-colors hover:bg-ink hover:text-bg-base"
-                      >
-                        <ArrowLeftIcon size={20} />
-                      </button>
-                      <button
-                        type="button"
-                        onClick={nextPage}
-                        aria-label="Наступний приклад"
-                        className="flex h-10.5 w-10.5 items-center justify-center rounded-pill border border-ink/16 bg-white/70 text-ink transition-colors hover:bg-ink hover:text-bg-base"
-                      >
-                        <ArrowRightIcon size={20} />
-                      </button>
-                    </div>
+                  <div
+                    role="tablist"
+                    aria-label="Приклади кейсів"
+                    className="mt-3.5 flex gap-1.5"
+                  >
+                    {Array.from({ length: pages }, (_, i) => {
+                      const isDone = i < currentPage;
+                      const isActive = i === currentPage;
+                      return (
+                        <button
+                          key={i}
+                          type="button"
+                          role="tab"
+                          aria-selected={isActive}
+                          aria-label={`Приклад ${i + 1} з ${pages}`}
+                          onClick={() => setPage(i)}
+                          className="h-[3px] flex-1 cursor-pointer overflow-hidden rounded-pill bg-ink/12"
+                        >
+                          <span
+                            key={isActive ? currentPage : "static"}
+                            className={`block h-full rounded-pill bg-ink motion-reduce:!w-full motion-reduce:!animate-none ${
+                              isDone
+                                ? "w-full"
+                                : isActive
+                                  ? `w-0 animate-[rail-fill_4000ms_linear_forwards] ${
+                                      isPaused ? "[animation-play-state:paused]" : ""
+                                    }`
+                                  : "w-0"
+                            }`}
+                          />
+                        </button>
+                      );
+                    })}
                   </div>
                 ) : null}
-              </>
+              </div>
             ) : (
               <div className="flex min-h-[260px] flex-1 flex-col items-center justify-center gap-4 rounded-frame bg-ink/6 px-6 text-center">
                 <span className="flex h-12 w-12 items-center justify-center rounded-pill border border-ink/10 bg-white/70 text-bronze-deep">
@@ -348,8 +427,13 @@ export function Services() {
         </div>
       </div>
 
-      {lightboxItem ? (
-        <Lightbox item={lightboxItem} onClose={() => setLightboxItem(null)} />
+      {lightboxIndex !== null ? (
+        <Lightbox
+          items={media}
+          index={lightboxIndex}
+          onNavigate={setLightboxIndex}
+          onClose={() => setLightboxIndex(null)}
+        />
       ) : null}
     </section>
   );

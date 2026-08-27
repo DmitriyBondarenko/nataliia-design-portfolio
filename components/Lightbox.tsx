@@ -2,27 +2,47 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { MediaItem } from "@/data/services";
+import { ArrowLeftIcon, ArrowRightIcon } from "./icons";
 import { MediaPlaceholder } from "./MediaPlaceholder";
 
 export function Lightbox({
-  item,
+  items,
+  index,
+  onNavigate,
   onClose,
 }: {
-  item: MediaItem;
+  items: MediaItem[];
+  index: number;
+  onNavigate: (index: number) => void;
   onClose: () => void;
 }) {
   const closeRef = useRef<HTMLButtonElement>(null);
-  const [videoFailed, setVideoFailed] = useState(false);
-  const showVideo = item.kind === "video" && !!item.src && !videoFailed;
+  // Tracks the id of a video that failed to load, so switching to a
+  // different item doesn't need an effect to reset the failure state.
+  const [failedId, setFailedId] = useState<string | null>(null);
+  const item = items[index];
+  const hasMultiple = items.length > 1;
+  const showVideo = item.kind === "video" && !!item.src && failedId !== item.id;
+
+  function goPrev() {
+    onNavigate((index - 1 + items.length) % items.length);
+  }
+  function goNext() {
+    onNavigate((index + 1) % items.length);
+  }
 
   useEffect(() => {
     closeRef.current?.focus();
     function onKeyDown(e: KeyboardEvent) {
       if (e.key === "Escape") onClose();
+      if (!hasMultiple) return;
+      if (e.key === "ArrowLeft") goPrev();
+      if (e.key === "ArrowRight") goNext();
     }
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
-  }, [onClose]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [onClose, index, hasMultiple]);
 
   return (
     <div
@@ -39,16 +59,18 @@ export function Lightbox({
       >
         {showVideo ? (
           <video
+            key={item.id}
             src={item.src}
             poster={item.poster}
             controls
             playsInline
             preload="metadata"
             className="h-full w-full object-contain"
-            onError={() => setVideoFailed(true)}
+            onError={() => setFailedId(item.id)}
           />
         ) : (
           <MediaPlaceholder
+            key={item.id}
             ratio={item.ratio}
             kind={item.kind}
             alt={item.alt}
@@ -67,6 +89,29 @@ export function Lightbox({
         >
           ✕
         </button>
+        {hasMultiple ? (
+          <>
+            <button
+              type="button"
+              onClick={goPrev}
+              aria-label="Попередній приклад"
+              className="absolute top-1/2 left-3 flex h-10.5 w-10.5 -translate-y-1/2 cursor-pointer items-center justify-center rounded-pill bg-ink/70 text-bg-base transition-colors hover:bg-ink"
+            >
+              <ArrowLeftIcon size={20} />
+            </button>
+            <button
+              type="button"
+              onClick={goNext}
+              aria-label="Наступний приклад"
+              className="absolute top-1/2 right-3 flex h-10.5 w-10.5 -translate-y-1/2 cursor-pointer items-center justify-center rounded-pill bg-ink/70 text-bg-base transition-colors hover:bg-ink"
+            >
+              <ArrowRightIcon size={20} />
+            </button>
+            <p className="absolute bottom-3 left-1/2 m-0 -translate-x-1/2 rounded-pill bg-ink/70 px-3.5 py-1.5 text-[15px] tracking-[0.06em] text-bg-base">
+              {index + 1} / {items.length}
+            </p>
+          </>
+        ) : null}
       </div>
     </div>
   );

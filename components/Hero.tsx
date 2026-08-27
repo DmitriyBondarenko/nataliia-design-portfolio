@@ -25,7 +25,7 @@ export function Hero() {
             ratio="4 / 5"
             kind="image"
             alt="Портрет Наталії Бондаренко, холодне сталеве освітлення"
-            src="/media/hero.jpg"
+            src="/media/hero.webp"
             position="50% 36%"
             fill
           />
@@ -33,14 +33,14 @@ export function Hero() {
         <div className="scrim-hero pointer-events-none absolute inset-0" />
 
         <nav
-          className={`glass-nav pointer-events-auto relative z-[3] m-4 flex flex-col overflow-hidden transition-[border-radius] duration-200 md:rounded-pill ${
+          className={`glass-nav pointer-events-auto relative z-[3] m-4 flex flex-col overflow-hidden lg:rounded-pill ${
             menuOpen ? "rounded-[28px]" : "rounded-pill"
           }`}
         >
           <div className="flex items-center gap-2 py-2 pr-2.5 pl-5">
             <span className="text-[22px] font-medium uppercase text-white/92">NB</span>
             <span className="flex-1" />
-            <div className="hidden items-center gap-x-[22px] md:flex">
+            <div className="hidden items-center gap-x-[22px] lg:flex">
               {NAV_LINKS.map((link) => (
                 <a
                   key={link.href}
@@ -62,13 +62,13 @@ export function Hero() {
               onClick={() => setMenuOpen((open) => !open)}
               aria-expanded={menuOpen}
               aria-label={menuOpen ? "Закрити меню" : "Відкрити меню"}
-              className="flex h-11 w-11 items-center justify-center rounded-pill text-white/92 md:hidden"
+              className="flex h-11 w-11 items-center justify-center rounded-pill text-white/92 lg:hidden"
             >
               {menuOpen ? <CloseIcon size={20} /> : <MenuIcon size={20} />}
             </button>
           </div>
           {menuOpen ? (
-            <div className="flex flex-col gap-1 px-5 pt-1 pb-5 md:hidden">
+            <div className="flex flex-col gap-1 px-5 pt-1 pb-5 lg:hidden">
               {NAV_LINKS.map((link) => (
                 <a
                   key={link.href}
@@ -93,7 +93,7 @@ export function Hero() {
         <div className="pointer-events-none relative z-[2] flex flex-1 flex-col justify-end px-[clamp(18px,4vw,46px)] pb-[clamp(24px,3vw,44px)]">
           <span className="mb-4.5 text-[26px] leading-none text-bronze">✳︎</span>
 
-          <h1 className="m-0 text-[clamp(38px,9vw,108px)] leading-[0.9] font-medium tracking-[-0.035em] text-balance text-bg-base">
+          <h1 className="m-0 text-[clamp(70px,9vw,108px)] leading-[0.9] font-medium tracking-[-0.035em] text-balance text-bg-base">
             Creative<span className="text-bronze">&nbsp;&amp;</span>
             <br />
             <span className="inline-block ml-[clamp(0px,6vw,90px)]">Motion</span>

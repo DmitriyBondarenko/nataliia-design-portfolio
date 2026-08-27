@@ -1,7 +1,7 @@
 // Services, prices and case content for "Послуги та прайс".
 // Media renders through <MediaPlaceholder> — real files/URLs land in public/media/.
 
-export type Ratio = "9 / 16" | "4 / 5" | "16 / 10";
+export type Ratio = "9 / 16" | "4 / 5" | "16 / 10" | "6 / 5" | "16 / 9";
 
 export type MediaKind = "image" | "video";
 
@@ -50,7 +50,7 @@ function buildCases(
 ): MediaItem[] {
   return Array.from({ length: count }, (_, i) => {
     const id = `${idPrefix}-${i}`;
-    // Convention: drop a file at public/media/<id>.jpg (photo, or video poster
+    // Convention: drop a file at public/media/<id>.webp (photo, or video poster
     // frame) and it's picked up automatically — no code change needed. Until
     // the file exists, <MediaPlaceholder> falls back to the placeholder UI.
     return {
@@ -59,8 +59,8 @@ function buildCases(
       ratio,
       alt: `${altPrefix} ${i + 1}`,
       ...(kind === "video"
-        ? { poster: `/media/${id}.jpg`, src: `/media/${id}.mp4` }
-        : { src: `/media/${id}.jpg` }),
+        ? { poster: `/media/${id}.webp`, src: `/media/${id}.mp4` }
+        : { src: `/media/${id}.webp` }),
     };
   });
 }
@@ -105,7 +105,7 @@ export const SERVICE_TABS: ServiceTab[] = [
           ),
           "4 / 5": buildCases(
             "ex-design-45",
-            10,
+            12,
             "image",
             "4 / 5",
             "Приклад дизайн-кейсу, формат 4:5, №"
@@ -128,9 +128,9 @@ export const SERVICE_TABS: ServiceTab[] = [
         note: "Примітка: у вартість не включено каруселі, тому після обкладинки, наступний слайд каруселі оплачується окремо — 200 грн / слайд.",
         media: buildCases(
           "ex-insta",
-          10,
+          4,
           "image",
-          "16 / 10",
+          "6 / 5",
           "Приклад упаковки Instagram, №"
         ),
       },
@@ -152,7 +152,7 @@ export const SERVICE_TABS: ServiceTab[] = [
           "ex-decks",
           10,
           "image",
-          "16 / 10",
+          "16 / 9",
           "Приклад презентації, №"
         ),
       },
@@ -174,7 +174,7 @@ export const SERVICE_TABS: ServiceTab[] = [
         prices: [{ label: "до 1 хв", value: "від 11$" }],
         media: buildCases(
           "ex-basic",
-          10,
+          2,
           "video",
           "9 / 16",
           "Відео-кейс базового монтажу, №"
@@ -198,7 +198,7 @@ export const SERVICE_TABS: ServiceTab[] = [
         ],
         media: buildCases(
           "ex-dynamic",
-          10,
+          4,
           "video",
           "9 / 16",
           "Відео-кейс динамічного монтажу, №"
@@ -218,7 +218,7 @@ export const SERVICE_TABS: ServiceTab[] = [
           { label: "до 30 секунд", value: "50$" },
           { label: "до 1 хв", value: "70$" },
         ],
-        media: buildCases("ex-motion", 10, "video", "9 / 16", "Моушн-кейс, №"),
+        media: buildCases("ex-motion", 4, "video", "9 / 16", "Моушн-кейс, №"),
       },
     ],
   },
@@ -232,7 +232,7 @@ export const STATS: PriceRow[] = [
 ];
 
 export function perPageFor(ratio: Ratio): number {
-  if (ratio === "16 / 10") return 1;
+  if (ratio === "16 / 10" || ratio === "16 / 9" || ratio === "6 / 5") return 1;
   if (ratio === "4 / 5") return 4;
   return 2;
 }

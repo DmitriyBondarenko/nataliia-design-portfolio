@@ -89,7 +89,7 @@ export function Lightbox({
           type="button"
           onClick={onClose}
           aria-label="Закрити"
-          className="absolute top-3 right-3 flex h-9 w-9 cursor-pointer items-center justify-center rounded-pill bg-ink/70 text-lg text-bg-base"
+          className="absolute top-3 right-3 flex h-9 w-9 cursor-pointer items-center justify-center rounded-pill bg-ink/70 text-[18px] max-sm:text-[15px] text-bg-base"
         >
           ✕
         </button>

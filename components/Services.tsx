@@ -135,6 +135,173 @@ export function Services() {
     if (e.key === "ArrowRight") nextPage();
   }
 
+  // Shared between the desktop side panel and the mobile inline preview
+  // (rendered inside whichever service card is open) — always reflects
+  // `service`, the currently selected card, so both mounts stay in sync.
+  const showcaseContent = (
+    <>
+      <div className="mb-4 flex items-center justify-between gap-3.5 max-sm:gap-1.5">
+        <p className="m-0 text-[18px] max-sm:text-[15px] text-label">Приклад</p>
+        <div className="flex items-center gap-2.5">
+          {isDesign ? (
+            <div className="flex gap-1 max-sm:gap-0.5 rounded-pill border border-white/90 bg-white/50 p-1 max-sm:p-0.5">
+              {(["9 / 16", "4 / 5"] as Ratio[]).map((f) => {
+                const active = format === f;
+                return (
+                  <button
+                    key={f}
+                    type="button"
+                    onClick={() => selectFormat(f)}
+                    className={`rounded-pill px-3.5 max-sm:px-2 py-1.5 text-[18px] max-sm:text-[15px] transition-all duration-200 ${
+                      active ? "bg-ink text-bg-base" : "bg-transparent text-label"
+                    }`}
+                  >
+                    {f === "4 / 5" ? "Каруселі" : "Креативи"}
+                  </button>
+                );
+              })}
+            </div>
+          ) : null}
+          {service && !isDesign ? (
+            <p className="m-0 text-[18px] max-sm:text-[15px] text-label">{service.title}</p>
+          ) : null}
+        </div>
+      </div>
+
+      {service ? (
+        <div
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+        >
+          <div
+            tabIndex={pages > 1 ? 0 : -1}
+            onKeyDown={onGalleryKeyDown}
+            onTouchStart={(e) => {
+              onTouchStart(e);
+              setIsPaused(true);
+            }}
+            onTouchEnd={(e) => {
+              onTouchEnd(e);
+              setIsPaused(false);
+            }}
+            onFocus={() => setIsPaused(true)}
+            onBlur={() => setIsPaused(false)}
+            className="relative overflow-hidden rounded-frame bg-ink/6 outline-none"
+          >
+            <div
+              className="flex items-stretch transition-transform duration-[480ms] ease-[cubic-bezier(0.65,0.05,0.36,1)]"
+              style={{
+                flexWrap: perPage === 4 ? "wrap" : "nowrap",
+                gap: perPage === 1 ? "0px" : "12px",
+              }}
+            >
+              {pageItems.map((item, i) => (
+                <div
+                  key={item.id}
+                  onClick={() => setLightboxIndex(currentPage * perPage + i)}
+                  className={`relative min-w-0 flex-none ${
+                    item.kind === "video" ? "cursor-pointer" : "cursor-zoom-in"
+                  }`}
+                  style={{
+                    width: perPage === 1 ? "100%" : "calc(50% - 6px)",
+                    aspectRatio: item.ratio,
+                  }}
+                >
+                  <MediaPlaceholder
+                    ratio={item.ratio}
+                    kind={item.kind}
+                    alt={item.alt}
+                    src={item.src}
+                    poster={item.poster}
+                    fill
+                  />
+                </div>
+              ))}
+            </div>
+
+            {pages > 1 ? (
+              <>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    prevPage();
+                  }}
+                  aria-label="Попередній приклад"
+                  className="absolute top-1/2 left-3 flex h-10.5 w-10.5 -translate-y-1/2 cursor-pointer items-center justify-center rounded-pill bg-ink/70 text-bg-base transition-colors hover:bg-ink"
+                >
+                  <ArrowLeftIcon size={18} />
+                </button>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    nextPage();
+                  }}
+                  aria-label="Наступний приклад"
+                  className="absolute top-1/2 right-3 flex h-10.5 w-10.5 -translate-y-1/2 cursor-pointer items-center justify-center rounded-pill bg-ink/70 text-bg-base transition-colors hover:bg-ink"
+                >
+                  <ArrowRightIcon size={18} />
+                </button>
+              </>
+            ) : null}
+          </div>
+
+          {pages > 1 ? (
+            <div
+              role="tablist"
+              aria-label="Приклади кейсів"
+              className="mt-3.5 flex gap-1.5"
+            >
+              {Array.from({ length: pages }, (_, i) => {
+                const isDone = i < currentPage;
+                const isActive = i === currentPage;
+                return (
+                  <button
+                    key={i}
+                    type="button"
+                    role="tab"
+                    aria-selected={isActive}
+                    aria-label={`Приклад ${i + 1} з ${pages}`}
+                    onClick={() => setPage(i)}
+                    className="h-[3px] flex-1 cursor-pointer overflow-hidden rounded-pill bg-ink/12"
+                  >
+                    <span
+                      key={isActive ? `${currentPage}-${restartTick}` : "static"}
+                      className={`block h-full rounded-pill bg-ink motion-reduce:!w-full motion-reduce:!animate-none ${
+                        isDone
+                          ? "w-full"
+                          : isActive
+                            ? `w-0 animate-[rail-fill_4000ms_linear_forwards] ${
+                                railPaused ? "[animation-play-state:paused]" : ""
+                              }`
+                            : "w-0"
+                      }`}
+                    />
+                  </button>
+                );
+              })}
+            </div>
+          ) : null}
+        </div>
+      ) : (
+        <div className="flex min-h-[260px] flex-1 flex-col items-center justify-center gap-4 rounded-frame bg-ink/6 px-6 text-center">
+          <span className="flex h-12 w-12 items-center justify-center rounded-pill border border-ink/10 bg-white/70 text-bronze-deep">
+            <CursorIcon size={19} />
+          </span>
+          <div>
+            <p className="m-0 text-[20px] max-sm:text-[18px] font-medium text-ink">
+              Оберіть послугу
+            </p>
+            <p className="m-0 mt-1 text-[18px] text-label">
+              щоб побачити приклади робіт і ціну
+            </p>
+          </div>
+        </div>
+      )}
+    </>
+  );
+
   return (
     <section
       id="services"
@@ -148,7 +315,7 @@ export function Services() {
             <br />
             <span className="text-[clamp(38px,9vw,108px)] text-bronze-deep">та прайс</span>
           </h2>
-          <p className="m-0 text-[18px] text-label-light">Оберіть напрям</p>
+          <p className="m-0 text-[18px] max-sm:text-[15px] text-label-light">Оберіть напрям</p>
         </div>
 
         <div className="mt-[clamp(24px,3vw,40px)] flex flex-wrap gap-2.5">
@@ -159,7 +326,7 @@ export function Services() {
                 <button
                   type="button"
                   onClick={() => selectTab(t.id)}
-                  className={`flex w-full items-center gap-3.5 rounded-card-sm border border-ink px-5.5 py-4.5 text-left text-[clamp(22px,1.6vw,24px)] font-medium tracking-[-0.01em] transition-all duration-200 ${
+                  className={`flex w-full items-center gap-3.5 rounded-card-sm border border-ink px-5.5 py-4.5 text-left text-[clamp(22px,1.6vw,24px)] max-sm:text-[20px] font-medium tracking-[-0.01em] transition-all duration-200 ${
                     active
                       ? "bg-ink text-bg-base hover:bg-[#262626]"
                       : "bg-[#F1F0EC] text-ink"
@@ -176,7 +343,7 @@ export function Services() {
         </div>
 
         <div className="mt-4 grid grid-cols-1 items-stretch gap-4 md:grid-cols-[repeat(auto-fit,minmax(320px,1fr))]">
-          <div className="order-2 flex flex-col gap-2.5 md:order-none">
+          <div className="flex flex-col gap-2.5">
             {tab.services.map((sv, i) => {
               const open = i === svcIndex;
               return (
@@ -198,7 +365,7 @@ export function Services() {
                     <span className="text-[18px] tracking-[0.12em] text-label-lightest">
                       {pad(i)}
                     </span>
-                    <span className="flex-1 text-[clamp(22px,1.7vw,24px)] font-medium tracking-[-0.02em]">
+                    <span className="flex-1 text-[clamp(22px,1.7vw,24px)] max-sm:text-[20px] font-medium tracking-[-0.02em]">
                       {sv.title}
                     </span>
                     <span
@@ -211,20 +378,24 @@ export function Services() {
                   </button>
                   {open ? (
                     <div className="px-5 pb-6">
-                      <p className="m-0 mb-2.5 text-[18px] text-label-lightest">
+                      <div className="glass-showcase relative mb-5 flex flex-col rounded-panel-showcase p-[clamp(16px,2vw,24px)] md:hidden">
+                        {showcaseContent}
+                      </div>
+
+                      <p className="m-0 mb-2.5 text-[18px] max-sm:text-[15px] text-label-lightest">
                         Що входить
                       </p>
                       {sv.includes.map((inc) => (
                         <div
                           key={inc}
-                          className="flex gap-2.5 py-1.5 text-[18px] leading-[1.45] text-body-muted"
+                          className="flex gap-2.5 py-1.5 text-[18px] max-sm:text-[15px] leading-[1.45] text-body-muted"
                         >
                           <span className="text-bronze">✓</span>
                           {inc}
                         </div>
                       ))}
 
-                      <p className="m-0 mt-5.5 mb-2.5 text-[18px] text-label-lightest">
+                      <p className="m-0 mt-5.5 mb-2.5 text-[18px] max-sm:text-[15px] text-label-lightest">
                         Вартість
                       </p>
                       {sv.prices.map((p) => (
@@ -232,11 +403,11 @@ export function Services() {
                           key={p.label}
                           className="flex items-baseline gap-2.5 border-b border-ink/7 py-1.5"
                         >
-                          <span className="text-[20px] text-body-muted">
+                          <span className="text-[20px] max-sm:text-[18px] text-body-muted">
                             {p.label}
                           </span>
                           <span className="h-px flex-1" />
-                          <span className="text-[20px] font-semibold tracking-[-0.01em] whitespace-nowrap">
+                          <span className="text-[20px] max-sm:text-[18px] font-semibold tracking-[-0.01em] whitespace-nowrap">
                             {p.value}
                           </span>
                         </div>
@@ -244,7 +415,7 @@ export function Services() {
 
                       {sv.packages ? (
                         <div className="mt-4.5 rounded-plate border border-ink/6 bg-bg-raised p-4.5">
-                          <p className="m-0 mb-2.5 text-[20px] font-semibold tracking-[-0.01em]">
+                          <p className="m-0 mb-2.5 text-[20px] max-sm:text-[18px] font-semibold tracking-[-0.01em]">
                             {sv.packagesTitle}
                           </p>
                           {sv.packages.map((pk) => (
@@ -252,11 +423,11 @@ export function Services() {
                               key={pk.label}
                               className="flex items-baseline gap-2.5 py-1.5"
                             >
-                              <span className="text-[20px] text-body-muted">
+                              <span className="text-[20px] max-sm:text-[18px] text-body-muted">
                                 {pk.label}
                               </span>
                               <span className="flex-1 border-b border-dotted border-ink/20" />
-                              <span className="text-[20px] font-semibold">
+                              <span className="text-[20px] max-sm:text-[18px] font-semibold">
                                 {pk.value}
                               </span>
                             </div>
@@ -265,7 +436,7 @@ export function Services() {
                       ) : null}
 
                       {sv.note ? (
-                        <p className="m-0 mt-3.5 text-[18px] leading-[1.5] text-label-light">
+                        <p className="m-0 mt-3.5 text-[18px] max-sm:text-[15px] leading-[1.5] text-label-light">
                           {sv.note}
                         </p>
                       ) : null}
@@ -278,171 +449,11 @@ export function Services() {
 
           <Reveal
             delay={120}
-            className={`glass-showcase relative order-1 flex flex-col rounded-panel-showcase p-[clamp(16px,2vw,24px)] md:order-none ${
+            className={`glass-showcase relative hidden flex-col rounded-panel-showcase p-[clamp(16px,2vw,24px)] md:flex ${
               service && !stretchPanel ? "self-start" : "self-stretch"
             }`}
           >
-            <div className="mb-4 flex items-center justify-between gap-3.5">
-              <p className="m-0 text-[18px] text-label">Приклад</p>
-              <div className="flex items-center gap-2.5">
-                {isDesign ? (
-                  <div className="flex gap-1 rounded-pill border border-white/90 bg-white/50 p-1">
-                    {(["9 / 16", "4 / 5"] as Ratio[]).map((f) => {
-                      const active = format === f;
-                      return (
-                        <button
-                          key={f}
-                          type="button"
-                          onClick={() => selectFormat(f)}
-                          className={`rounded-pill px-3.5 py-1.5 text-[18px] transition-all duration-200 ${
-                            active ? "bg-ink text-bg-base" : "bg-transparent text-label"
-                          }`}
-                        >
-                          {f === "4 / 5" ? "Каруселі" : "Креативи"}
-                        </button>
-                      );
-                    })}
-                  </div>
-                ) : null}
-                {service && !isDesign ? (
-                  <p className="m-0 text-[18px] text-label">{service.title}</p>
-                ) : null}
-              </div>
-            </div>
-
-            {service ? (
-              <div
-                onMouseEnter={() => setIsPaused(true)}
-                onMouseLeave={() => setIsPaused(false)}
-              >
-                <div
-                  tabIndex={pages > 1 ? 0 : -1}
-                  onKeyDown={onGalleryKeyDown}
-                  onTouchStart={(e) => {
-                    onTouchStart(e);
-                    setIsPaused(true);
-                  }}
-                  onTouchEnd={(e) => {
-                    onTouchEnd(e);
-                    setIsPaused(false);
-                  }}
-                  onFocus={() => setIsPaused(true)}
-                  onBlur={() => setIsPaused(false)}
-                  className="relative overflow-hidden rounded-frame bg-ink/6 outline-none"
-                >
-                  <div
-                    className="flex items-stretch transition-transform duration-[480ms] ease-[cubic-bezier(0.65,0.05,0.36,1)]"
-                    style={{
-                      flexWrap: perPage === 4 ? "wrap" : "nowrap",
-                      gap: perPage === 1 ? "0px" : "12px",
-                    }}
-                  >
-                    {pageItems.map((item, i) => (
-                      <div
-                        key={item.id}
-                        onClick={() =>
-                          setLightboxIndex(currentPage * perPage + i)
-                        }
-                        className={`relative min-w-0 flex-none ${
-                          item.kind === "video" ? "cursor-pointer" : "cursor-zoom-in"
-                        }`}
-                        style={{
-                          width: perPage === 1 ? "100%" : "calc(50% - 6px)",
-                          aspectRatio: item.ratio,
-                        }}
-                      >
-                        <MediaPlaceholder
-                          ratio={item.ratio}
-                          kind={item.kind}
-                          alt={item.alt}
-                          src={item.src}
-                          poster={item.poster}
-                          fill
-                        />
-                      </div>
-                    ))}
-                  </div>
-
-                  {pages > 1 ? (
-                    <>
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          prevPage();
-                        }}
-                        aria-label="Попередній приклад"
-                        className="absolute top-1/2 left-3 flex h-10.5 w-10.5 -translate-y-1/2 cursor-pointer items-center justify-center rounded-pill bg-ink/70 text-bg-base transition-colors hover:bg-ink"
-                      >
-                        <ArrowLeftIcon size={18} />
-                      </button>
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          nextPage();
-                        }}
-                        aria-label="Наступний приклад"
-                        className="absolute top-1/2 right-3 flex h-10.5 w-10.5 -translate-y-1/2 cursor-pointer items-center justify-center rounded-pill bg-ink/70 text-bg-base transition-colors hover:bg-ink"
-                      >
-                        <ArrowRightIcon size={18} />
-                      </button>
-                    </>
-                  ) : null}
-                </div>
-
-                {pages > 1 ? (
-                  <div
-                    role="tablist"
-                    aria-label="Приклади кейсів"
-                    className="mt-3.5 flex gap-1.5"
-                  >
-                    {Array.from({ length: pages }, (_, i) => {
-                      const isDone = i < currentPage;
-                      const isActive = i === currentPage;
-                      return (
-                        <button
-                          key={i}
-                          type="button"
-                          role="tab"
-                          aria-selected={isActive}
-                          aria-label={`Приклад ${i + 1} з ${pages}`}
-                          onClick={() => setPage(i)}
-                          className="h-[3px] flex-1 cursor-pointer overflow-hidden rounded-pill bg-ink/12"
-                        >
-                          <span
-                            key={isActive ? `${currentPage}-${restartTick}` : "static"}
-                            className={`block h-full rounded-pill bg-ink motion-reduce:!w-full motion-reduce:!animate-none ${
-                              isDone
-                                ? "w-full"
-                                : isActive
-                                  ? `w-0 animate-[rail-fill_4000ms_linear_forwards] ${
-                                      railPaused ? "[animation-play-state:paused]" : ""
-                                    }`
-                                  : "w-0"
-                            }`}
-                          />
-                        </button>
-                      );
-                    })}
-                  </div>
-                ) : null}
-              </div>
-            ) : (
-              <div className="flex min-h-[260px] flex-1 flex-col items-center justify-center gap-4 rounded-frame bg-ink/6 px-6 text-center">
-                <span className="flex h-12 w-12 items-center justify-center rounded-pill border border-ink/10 bg-white/70 text-bronze-deep">
-                  <CursorIcon size={19} />
-                </span>
-                <div>
-                  <p className="m-0 text-[20px] font-medium text-ink">
-                    Оберіть послугу
-                  </p>
-                  <p className="m-0 mt-1 text-[18px] text-label">
-                    щоб побачити приклади робіт і ціну
-                  </p>
-                </div>
-              </div>
-            )}
+            {showcaseContent}
             <div className="min-h-0 flex-1" />
           </Reveal>
         </div>

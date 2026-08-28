@@ -81,7 +81,7 @@ export function Terms() {
     >
       <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-start gap-[clamp(28px,4vw,60px)]">
         <div>
-          <p className="m-0 mb-3.5 text-[18px] text-label-lightest">
+          <p className="m-0 mb-3.5 text-[18px] max-sm:text-[15px] text-label-lightest">
             Формат роботи
           </p>
           <h2 className="m-0 text-[clamp(38px,9vw,108px)] leading-[0.96] font-normal tracking-[-0.04em] text-ink">
@@ -89,7 +89,7 @@ export function Terms() {
             <br />
             <span className="text-bronze-deep">співпраці</span>
           </h2>
-          <span className="mt-5 block text-[17px] tracking-[0.1em] text-bronze">
+          <span className="mt-5 block text-[17px] max-sm:text-[15px] tracking-[0.1em] text-bronze">
             {"///"}
           </span>
         </div>
@@ -105,7 +105,7 @@ export function Terms() {
                   aria-expanded={open}
                   className="flex w-full items-center gap-4 bg-transparent py-5.5 text-left font-inherit text-inherit transition-colors hover:text-bronze-deep"
                 >
-                  <span className="flex-1 text-[clamp(22px,1.6vw,24px)] font-medium tracking-[-0.02em]">
+                  <span className="flex-1 text-[clamp(22px,1.6vw,24px)] max-sm:text-[20px] font-medium tracking-[-0.02em]">
                     {term.title}
                   </span>
                   <span
@@ -122,7 +122,7 @@ export function Terms() {
                       {term.rows.map((row, j) => (
                         <p
                           key={j}
-                          className="m-0 text-[20px] leading-[1.5] text-body-muted"
+                          className="m-0 text-[20px] max-sm:text-[18px] leading-[1.5] text-body-muted"
                         >
                           <span className="font-semibold text-ink">
                             {row.lead}

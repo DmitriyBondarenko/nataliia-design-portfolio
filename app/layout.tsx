@@ -13,6 +13,9 @@ export const metadata: Metadata = {
   title: "Nataliia Bondarenko — Creative & Motion Designer",
   description:
     "Дизайн та монтаж відео для соцмереж: рекламні креативи, упаковка Instagram, презентації, Reels. Прайс і кейси кожної послуги.",
+  icons: {
+    apple: "/apple-touch-icon.png",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
